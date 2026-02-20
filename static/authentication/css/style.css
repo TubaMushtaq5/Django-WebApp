@@ -1,0 +1,221 @@
+/* Reset box sizing */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Body and waves */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+/* Waves */
+.wave-container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.wave {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: rgba(255,255,255,0.05);
+    border-radius: 45%;
+    animation: wave 10s infinite linear;
+}
+
+.wave-2 { animation-duration: 15s; }
+.wave-3 { animation-duration: 20s; }
+
+@keyframes wave {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Home Container */
+.home-container {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 750px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    margin-top: 50px;
+}
+
+.home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.home-header h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #333;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-pic {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.profile-pic:hover {
+    transform: scale(1.1);
+}
+
+.logout-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.logout-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Main Content */
+.home-intro {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+/* Cards */
+.card {
+    background: #f7f7f7;
+    padding: 25px 20px;
+    border-radius: 16px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* Form */
+.datetime-form-container h2 {
+    margin-top: 0;
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #333;
+}
+/* Form group spacing */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px; /* more space between fields */
+}
+
+/* Labels */
+.form-group label {
+    margin-bottom: 8px; /* small gap between label and input */
+    font-weight: 500;
+    color: #444;
+}
+
+/* Inputs & Select */
+.form-group input,
+.form-group select {
+    padding: 12px 15px; /* more padding inside box */
+    border-radius: 12px; /* rounded corners */
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 15px;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Focus effect */
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 6px rgba(102, 126, 234, 0.3);
+}
+/* Gradient button inside form */
+.gradient-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.gradient-button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Records */
+.records-container h3 {
+    margin-top: 0;
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.records-container ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.records-container li {
+    background: white;
+    padding: 10px 15px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .home-container {
+        padding: 30px 20px;
+        margin-top: 30px;
+    }
+
+    .home-header h1 {
+        font-size: 20px;
+    }
+
+    .logout-btn,
+    .gradient-button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .profile-pic {
+        width: 38px;
+        height: 38px;
+    }
+}
