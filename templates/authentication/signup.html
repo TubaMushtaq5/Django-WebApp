@@ -26,11 +26,12 @@
             <ul>
                 {% for field in form %}
                     {% for error in field.errors %}
-                        <li>{{ error }}</li>
+                        <div class="error-message">{{ error }}</div>
                     {% endfor %}
                 {% endfor %}
+
                 {% for error in form.non_field_errors %}
-                    <li>{{ error }}</li>
+                    <div class="error-message">{{ error }}</div>
                 {% endfor %}
             </ul>
         </div>
@@ -43,10 +44,14 @@
         <div class="form-group">
             {% if field.name == 'phone_number' %}
                 <input type="text" name="{{ field.name }}" id="{{ field.id_for_label }}" value="{{ field.value|default_if_none:'' }}" required>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% elif field.name == 'profile_pic' %}
+                {{ field }}  <!-- let Django handle the file input -->
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             {% else %}
                 {{ field }}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             {% endif %}
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
         </div>
         {% endfor %}
 

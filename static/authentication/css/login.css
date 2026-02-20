@@ -95,7 +95,8 @@ body {
 }
 
 .form-group input:focus + label,
-.form-group input:not(:placeholder-shown) + label {
+.form-group input:not(:placeholder-shown) + label,
+.form-group input:-webkit-autofill + label {
     top: -8px;
     left: 10px;
     font-size: 12px;

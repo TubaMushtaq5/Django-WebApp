@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'authentication',
+    # 'authentication.apps.AuthenticationConfig',
 ]
 
 MIDDLEWARE = [
@@ -122,7 +123,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',   # VERY IMPORTANT
 ]
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # In settings.py
 LOGIN_REDIRECT_URL = '/'   # after login, go to home
 LOGOUT_REDIRECT_URL = '/auth/login/'  # after logout, go to login page
