@@ -1,13 +1,14 @@
+from django.utils import timezone
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+import pytz
 
-from authentication.models import CustomUser
+from authentication.models import PSTDateTimeRecord
 from .forms import CustomUserCreationForm, ProfileEditForm
-from .exceptions import UserAlreadyExistsException, InvalidPhoneNumberException
-from django.core.exceptions import ValidationError
-from .exceptions import UserAlreadyExistsException, InvalidPhoneNumberException
+
 
 def signup_view(request):
     if request.method == 'POST':
@@ -16,7 +17,6 @@ def signup_view(request):
             user = form.save()
             login(request, user)
             return redirect('home')
-        # no need to manually catch anything — form.errors handles it
     else:
         form = CustomUserCreationForm()
 
@@ -60,3 +60,33 @@ def logout_view(request):
 @login_required(login_url='/auth/login/')
 def home_view(request):
     return render(request, 'home.html')
+
+@login_required(login_url='/auth/login/')
+def add_datetime(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        region = request.POST.get("region")
+        print(f"Received title: {title}, region: {region}")  # Debugging statement
+        if title and region:
+            now_utc = timezone.now()
+            pst_tz = pytz.timezone("America/Los_Angeles")
+            print(f"Current UTC time: {now_utc}")
+            if region == "utc":
+                # print("User converting to PST for saving.")
+                # User selected UTC → convert to PST for saving
+                aware_dt = now_utc.astimezone(pst_tz)
+                # print(f"Converted UTC to PST: {aware_dt}")
+            else:
+                # print("User selected PST, using current time in PST.")
+                # User selected PST → get current time in PST
+                aware_dt = now_utc.astimezone(pst_tz)
+                # print(f"Current time in PST: {aware_dt}")
+            # Save record
+            
+            PSTDateTimeRecord.objects.create(title=title, datetime_pst=aware_dt)
+            print(f"Data to be added: {aware_dt}")
+            return redirect("home")
+
+    # Fetch all records for display
+    records = PSTDateTimeRecord.objects.all()
+    return render(request, "home.html", {"records": records})

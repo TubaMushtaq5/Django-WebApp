@@ -6,7 +6,7 @@
 /* Body and waves */
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea, #764ba2);
     min-height: 100vh;
     display: flex;
@@ -43,12 +43,12 @@ body {
 
 /* Home Container */
 .home-container {
-    background: white;
+    background: #fff;
     padding: 40px 30px;
-    border-radius: 16px;
+    border-radius: 20px;
     width: 100%;
-    max-width: 700px;
-    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    max-width: 750px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
     margin-top: 50px;
 }
 
@@ -57,8 +57,15 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 15px 30px;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.15);
     border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.home-header h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #333;
 }
 
 .header-actions {
@@ -68,81 +75,126 @@ body {
 }
 
 .profile-pic {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid white;
     cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.profile-pic:hover {
+    transform: scale(1.1);
 }
 
 .logout-btn {
-    padding: 10px 15px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 600;
+    transition: opacity 0.3s ease, transform 0.2s ease;
 }
 
 .logout-btn:hover {
     opacity: 0.9;
-}
-
-.header-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-/* Make logout/profile buttons same as gradient buttons */
-.header-buttons .logout-btn {
-    padding: 8px 16px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border: none;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: opacity 0.3s ease;
-    text-decoration: none;
-}
-
-.header-buttons .logout-btn:hover {
-    opacity: 0.9;
-}
-
-.home-header h1 {
-    margin: 0;
-    font-size: 24px;
-    color: #333;
-}
-
-.logout-btn:hover {
-    opacity: 0.9;
+    transform: translateY(-2px);
 }
 
 /* Main Content */
-.home-container main p {
+.home-intro {
     font-size: 16px;
     color: #555;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
-/* Gradient button inside home */
+/* Cards */
+.card {
+    background: #f7f7f7;
+    padding: 25px 20px;
+    border-radius: 16px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* Form */
+.datetime-form-container h2 {
+    margin-top: 0;
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #333;
+}
+/* Form group spacing */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px; /* more space between fields */
+}
+
+/* Labels */
+.form-group label {
+    margin-bottom: 8px; /* small gap between label and input */
+    font-weight: 500;
+    color: #444;
+}
+
+/* Inputs & Select */
+.form-group input,
+.form-group select {
+    padding: 12px 15px; /* more padding inside box */
+    border-radius: 12px; /* rounded corners */
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 15px;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Focus effect */
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 6px rgba(102, 126, 234, 0.3);
+}
+/* Gradient button inside form */
 .gradient-button {
-    padding: 14px 25px;
+    padding: 12px 25px;
     border: none;
     border-radius: 12px;
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.2s ease;
 }
 
 .gradient-button:hover {
     opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Records */
+.records-container h3 {
+    margin-top: 0;
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.records-container ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.records-container li {
+    background: white;
+    padding: 10px 15px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    font-size: 14px;
 }
 
 /* Responsive */
@@ -156,8 +208,14 @@ body {
         font-size: 20px;
     }
 
-    .logout-btn {
-        padding: 8px 15px;
+    .logout-btn,
+    .gradient-button {
+        padding: 8px 16px;
         font-size: 14px;
+    }
+
+    .profile-pic {
+        width: 38px;
+        height: 38px;
     }
 }

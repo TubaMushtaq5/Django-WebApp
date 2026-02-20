@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser
-
+from .models import PSTDateTimeRecord
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = (
@@ -23,3 +23,7 @@ class CustomUserAdmin(UserAdmin):
     )
 
 admin.site.register(CustomUser, CustomUserAdmin)
+
+@admin.register(PSTDateTimeRecord)
+class PSTDateTimeRecordAdmin(admin.ModelAdmin):
+    list_display = ("title", "datetime_pst")

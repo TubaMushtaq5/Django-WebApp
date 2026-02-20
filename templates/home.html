@@ -18,19 +18,14 @@
 <div class="home-container">
     <header class="home-header">
         <h1>Welcome, {{ request.user.username }}</h1>
-        
         <div class="header-actions">
-            <!-- Profile Picture -->
             <a href="{% url 'profile_edit' %}" class="profile-link">
                 {% if request.user.profile_pic %}
                     <img src="{{ request.user.profile_pic.url }}" alt="Profile" class="profile-pic">
                 {% else %}
                     <img src="{% static 'authentication/images/user.png' %}" alt="Profile" class="profile-pic">
                 {% endif %}
-
             </a>
-
-            <!-- Logout button -->
             <form id="logoutForm" method="POST" action="{% url 'logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="logout-btn">Logout</button>
@@ -39,12 +34,67 @@
     </header>
 
     <main>
-        <p>This is your dashboard. Add your content here.</p>
-        <!-- Example button -->
-        <button class="gradient-button">Click Me</button>
+        <p class="home-intro">This is your dashboard. Add your content here or manage your datetime records below.</p>
+
+        <!-- Datetime input form -->
+        <div class="datetime-form-container card">
+            <h2>Add a Date & Time</h2>
+            <form method="POST" action="{% url 'add_datetime' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" name="title" id="title" placeholder="Enter title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="region">Select Region:</label>
+                    <select name="region" id="region" required>
+                        <option value="pst">PST</option>
+                        <option value="utc">UTC</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="gradient-button">Save</button>
+            </form>
+        </div>
+
+        <!-- Display saved records -->
+        <div class="records-container card">
+            <h3>Your Saved Dates:</h3>
+            <ul>
+                {% for record in records %}
+                    <li><strong>{{ record.title }}</strong> - {{ record.get_datetime_in_pst|date:"Y-m-d H:i T" }}</li>
+                {% empty %}
+                    <li>No records yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
     </main>
 </div>
 
-<script src="{% static 'authentication/js/script.js' %}"></script>
+<script>
+    // Function to update datetime based on selected region
+    function updateDatetime() {
+        const region = document.getElementById('region').value;
+        const dtField = document.getElementById('datetime');
+        const now = new Date();
+
+        let tzOffset = 0; // in minutes
+
+        if (region === 'pst') {
+            // PST is UTC-8, adjust for DST automatically
+            const pstDate = new Date(now.toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
+            dtField.value = pstDate.toISOString().slice(0,16);
+        } else {
+            // UTC
+            dtField.value = now.toISOString().slice(0,16);
+        }
+    }
+
+    // Update datetime on page load and whenever region changes
+    document.addEventListener('DOMContentLoaded', updateDatetime);
+    document.getElementById('region').addEventListener('change', updateDatetime);
+</script>
+
 </body>
 </html>
