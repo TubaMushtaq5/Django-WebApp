@@ -3,21 +3,6 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 from .exceptions import UserAlreadyExistsException, InvalidPhoneNumberException
 
-# class CustomUserCreationForm(UserCreationForm):
-#     phone_number = forms.CharField(
-#         max_length=15,
-#         required=True,
-#         widget=forms.TextInput(attrs={
-#             'placeholder': 'Enter your phone number'
-#         })
-#     )
-#     profile_pic = forms.ImageField(
-#         required=True,  # make it mandatory
-#         widget=forms.ClearableFileInput(attrs={'class': 'form-control'})
-#     )
-#     class Meta:
-#         model = CustomUser
-#         fields = ("username", "email", "phone_number","profile_pic", "password1", "password2")
 
 class ProfileEditForm(forms.ModelForm):
     class Meta:
@@ -48,6 +33,7 @@ class CustomUserCreationForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if CustomUser.objects.filter(email=email).exists():
+            print("FORM-LEVEL: Email already exists!")  
             raise UserAlreadyExistsException(f"A user with email '{email}' already exists.")
         return email
 

@@ -6,3 +6,8 @@ from django.utils import timezone
 @receiver(pre_save, sender=CustomUser)
 def update_updated_at(sender, instance, **kwargs):
     instance.updated_at = timezone.now()
+
+@receiver(pre_save, sender=CustomUser)
+def normalize_email(sender, instance, **kwargs):
+    if instance.email:
+        instance.email = instance.email.lower()
