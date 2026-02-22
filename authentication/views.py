@@ -12,6 +12,7 @@ from .forms import CustomUserCreationForm, ProfileEditForm
 
 def signup_view(request):
     if request.method == 'POST':
+        # ModelForm as CustomUserCreationForm
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
@@ -22,7 +23,7 @@ def signup_view(request):
 
     return render(request, 'authentication/signup.html', {'form': form})
 
-@login_required
+# @login_required
 def profile_edit_view(request):
     if request.method == 'POST':
         form = ProfileEditForm(request.POST, request.FILES, instance=request.user)
@@ -52,41 +53,37 @@ def login_view(request):
     return render(request, 'authentication/login.html')
 
 
-@login_required
+# @login_required
 def logout_view(request):
     logout(request)
     return redirect('login')
 
-@login_required(login_url='/auth/login/')
+# @login_required(login_url='/auth/login/')
 def home_view(request):
-    return render(request, 'home.html')
+    records = PSTDateTimeRecord.objects.filter(user=request.user).order_by('-datetime_pst')
+    return render(request, "home.html", {"records": records})
 
-@login_required(login_url='/auth/login/')
+# @login_required(login_url='/auth/login/')
 def add_datetime(request):
+    print(f"Logged-in user: {request.user.username}")
     if request.method == "POST":
         title = request.POST.get("title")
         region = request.POST.get("region")
-        print(f"Received title: {title}, region: {region}")  # Debugging statement
+        print(f"Received title: {title}, region: {region}")
         if title and region:
             now_utc = timezone.now()
             pst_tz = pytz.timezone("America/Los_Angeles")
             print(f"Current UTC time: {now_utc}")
             if region == "utc":
-                # print("User converting to PST for saving.")
-                # User selected UTC → convert to PST for saving
                 aware_dt = now_utc.astimezone(pst_tz)
-                # print(f"Converted UTC to PST: {aware_dt}")
             else:
-                # print("User selected PST, using current time in PST.")
-                # User selected PST → get current time in PST
                 aware_dt = now_utc.astimezone(pst_tz)
-                # print(f"Current time in PST: {aware_dt}")
             # Save record
             
-            PSTDateTimeRecord.objects.create(title=title, datetime_pst=aware_dt)
+            PSTDateTimeRecord.objects.create(title=title, datetime_pst=aware_dt,user=request.user)
             print(f"Data to be added: {aware_dt}")
-            return redirect("home")
-
+            
+    return redirect("home")
     # Fetch all records for display
-    records = PSTDateTimeRecord.objects.all()
-    return render(request, "home.html", {"records": records})
+    # records = PSTDateTimeRecord.objects.filter(user=request.user)
+    # return render(request, "home.html", {"records": records})

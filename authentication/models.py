@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
 from django.forms import ValidationError
 import django.utils.timezone as timezone
 import pytz
@@ -15,6 +16,7 @@ class CustomUser(AbstractUser):
         return self.username
 
 class PSTDateTimeRecord(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     datetime_pst = models.DateTimeField()
 
@@ -39,4 +41,4 @@ class PSTDateTimeRecord(models.Model):
         return self.datetime_pst.astimezone(pst)
 
     def __str__(self):
-        return f"{self.title} - {self.get_datetime_in_pst().strftime('%Y-%m-%d %H:%M:%S %Z')}"
+        return f"{self.title} - {self.get_datetime_in_pst().strftime('%Y-%m-%d %H:%M:%S %Z')} - {self.user.username}"

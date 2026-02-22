@@ -1,4 +1,5 @@
 {% load static %}
+{% load static custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,7 @@
     <title>Home | WebApp</title>
     <link rel="stylesheet" href="{% static 'authentication/css/style.css' %}">
 </head>
+
 <body>
 
 <div class="wave-container">
@@ -20,7 +22,8 @@
         <h1>Welcome, {{ request.user.username }}</h1>
         <div class="header-actions">
             <a href="{% url 'profile_edit' %}" class="profile-link">
-                {% if request.user.profile_pic %}
+                <!-- Custom filter -->
+                {% if request.user|has_profile_pic %}
                     <img src="{{ request.user.profile_pic.url }}" alt="Profile" class="profile-pic">
                 {% else %}
                     <img src="{% static 'authentication/images/user.png' %}" alt="Profile" class="profile-pic">
@@ -63,7 +66,10 @@
             <h3>Your Saved Dates:</h3>
             <ul>
                 {% for record in records %}
-                    <li><strong>{{ record.title }}</strong> - {{ record.get_datetime_in_pst|date:"Y-m-d H:i T" }}</li>
+                    <li>
+                        <strong>{{ record.title }}</strong> 
+                        - {{ record.datetime_pst|date:"Y-m-d H:i T" }}
+                    </li>
                 {% empty %}
                     <li>No records yet.</li>
                 {% endfor %}
@@ -72,29 +78,6 @@
     </main>
 </div>
 
-<script>
-    // Function to update datetime based on selected region
-    function updateDatetime() {
-        const region = document.getElementById('region').value;
-        const dtField = document.getElementById('datetime');
-        const now = new Date();
-
-        let tzOffset = 0; // in minutes
-
-        if (region === 'pst') {
-            // PST is UTC-8, adjust for DST automatically
-            const pstDate = new Date(now.toLocaleString("en-US", { timeZone: "America/Los_Angeles" }));
-            dtField.value = pstDate.toISOString().slice(0,16);
-        } else {
-            // UTC
-            dtField.value = now.toISOString().slice(0,16);
-        }
-    }
-
-    // Update datetime on page load and whenever region changes
-    document.addEventListener('DOMContentLoaded', updateDatetime);
-    document.getElementById('region').addEventListener('change', updateDatetime);
-</script>
-
+<script src="{% static 'authentication/js/script.js' %}"></script>
 </body>
 </html>
