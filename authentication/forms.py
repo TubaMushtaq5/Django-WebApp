@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 from .exceptions import UserAlreadyExistsException, InvalidPhoneNumberException
 
-
+#ModelForms
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = CustomUser
@@ -13,10 +13,11 @@ class CustomUserCreationForm(UserCreationForm):
     phone_number = forms.CharField(
         max_length=15,
         required=True,
+        initial='0312-3456789',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your phone number'})
     )
     profile_pic = forms.ImageField(
-        required=True,
+        required=False,
         widget=forms.ClearableFileInput(attrs={'class': 'form-control'})
     )
 
@@ -26,10 +27,11 @@ class CustomUserCreationForm(UserCreationForm):
 
     def clean_phone_number(self):
         phone = self.cleaned_data.get('phone_number')
-        if not phone.isdigit() or len(phone) < 10:
+        # Remove spaces and dashes
+        phone_cleaned = phone.replace("-", "").replace(" ", "")
+        if not phone_cleaned.isdigit() or len(phone_cleaned) < 10:
             raise InvalidPhoneNumberException(f"The phone number '{phone}' is invalid.")
-        return phone
-
+        return phone_cleaned
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if CustomUser.objects.filter(email=email).exists():
