@@ -1,0 +1,50 @@
+{% extends "authentication/base_auth.html" %}
+{% load static %} 
+{% block title %}Login | WebApp{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'authentication/css/login.css' %}">
+{% endblock %}
+
+{% block header_title %}Welcome Back{% endblock %}
+{% block header_subtitle %}Sign in to continue your journey{% endblock %}
+
+{% block messages %}
+{% if messages %}
+    {% for message in messages %}
+        <p class="error-message">{{ message }}</p>
+    {% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block form_fields %}
+<div class="form-group">
+    <input type="text" name="email" id="email" required placeholder=" ">
+    <label for="email">Email</label>
+</div>
+
+<div class="form-group">
+    <input type="password" name="password" id="password" required placeholder=" ">
+    <label for="password">Password</label>
+</div>
+
+<div class="form-options">
+    <label class="checkbox-remember">
+        <input type="checkbox" name="remember"> Remember me
+    </label>
+    <a href="#" class="forgot-link">Forgot password?</a>
+</div>
+{% endblock %}
+
+{% block form_button %}
+<button type="submit" class="gradient-button">
+    <div class="button-bg"></div>
+    <div class="button-content">
+        <span class="btn-text">Sign In</span>
+    </div>
+</button>
+{% endblock %}
+
+{% block extra_links %}
+<p>New here? <a href="{% url 'signup' %}">Create account</a></p>
+{% endblock %}

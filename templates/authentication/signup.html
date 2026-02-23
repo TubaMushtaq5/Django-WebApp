@@ -1,0 +1,49 @@
+{% extends "authentication/base_auth.html" %}
+{% load static %} 
+{% block title %}Sign Up | WebApp{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'authentication/css/signup.css' %}">
+{% endblock %}
+
+{% block header_title %}Create Account{% endblock %}
+{% block header_subtitle %}Sign up to join our platform{% endblock %}
+
+{% block form_fields %}
+{% for field in form %}
+<div class="form-group">
+    {% if field.name == 'phone_number' %}
+        <input type="text" name="{{ field.name }}" id="{{ field.id_for_label }}" value="{{ field.value|default_if_none:'' }}" required>
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {% elif field.name == 'profile_pic' %}
+        {{ field }}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {% else %}
+        {{ field }}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {% endif %}
+
+    <!-- Display errors for this field -->
+    {% if field.errors %}
+        {% for error in field.errors %}
+            <div class="error-message">{{ error }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endfor %}
+
+<!-- Non-field errors (like password mismatch) -->
+{% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+        <div class="error-message">{{ error }}</div>
+    {% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block form_button %}
+<button type="submit" class="gradient-button">Sign Up</button>
+{% endblock %}
+
+{% block extra_links %}
+<p>Already have an account? <a href="{% url 'login' %}">Sign In</a></p>
+{% endblock %}

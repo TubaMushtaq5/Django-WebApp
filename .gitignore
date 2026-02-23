@@ -1,0 +1,17 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+cache/
+.cache/
+
+# Django .env / secrets
+.env
+*.env
+
+# Pytest
+.pytest_cache/
+
+# MyPy
+.mypy_cache/

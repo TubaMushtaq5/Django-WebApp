@@ -1,0 +1,44 @@
+{% extends "authentication/base_auth.html" %}
+{% load static %} 
+{% block title %}Edit Profile | WebApp{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'authentication/css/signup.css' %}">
+{% endblock %}
+
+{% block header_title %}Edit Profile{% endblock %}
+{% block header_subtitle %}Update your information{% endblock %}
+
+{% block messages %}
+{% if form.errors %}
+<div class="error-message">
+    <ul>
+        {% for field in form %}
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block form_fields %}
+{% for field in form %}
+<div class="form-group">
+    {{ field }}
+    <label>{{ field.label }}</label>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block form_button %}
+<button type="submit" class="gradient-button">Save Changes</button>
+{% endblock %}
+
+{% block extra_links %}
+<p><a href="{% url 'home' %}">Back to Dashboard</a></p>
+{% endblock %}
