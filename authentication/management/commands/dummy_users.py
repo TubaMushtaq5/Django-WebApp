@@ -25,4 +25,4 @@ class Command(BaseCommand):
             user.set_password("password123")
             users.append(user)
         CustomUser.objects.bulk_create(users)
-        self.stdout.write(self.style.SUCCESS(f'✅ Successfully inserted {num_users} dummy users with hashed passwords!'))
+        self.stdout.write(self.style.SUCCESS(f' Successfully inserted {num_users} dummy users with hashed passwords!'))
