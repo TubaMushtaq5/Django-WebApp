@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import pytz
 
-from authentication.models import PSTDateTimeRecord
+from authentication.models import CustomUser, PSTDateTimeRecord
 from .forms import CustomUserCreationForm, ProfileEditForm
 
 
@@ -39,20 +39,23 @@ def login_view(request):
         return redirect('home')
 
     if request.method == "POST":
-        username = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
 
-        user = authenticate(request, username=username, password=password)
+        # Authenticate using email
+        try:
+            user_obj = CustomUser.objects.get(email=email)
+            user = authenticate(request, username=user_obj.username, password=password)
+        except CustomUser.DoesNotExist:
+            user = None
 
         if user is not None:
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request, "Invalid username or password")
+            messages.error(request, "Invalid email or password")
 
     return render(request, 'authentication/login.html')
-
-
 # @login_required
 def logout_view(request):
     logout(request)

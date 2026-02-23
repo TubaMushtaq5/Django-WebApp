@@ -1,7 +1,7 @@
 from django import forms
 
 class UserAlreadyExistsException(forms.ValidationError):
-    def __init__(self, message="User with this email or username already exists"):
+    def __init__(self, message="User with this email already exists"):
         super().__init__(message)
 
 class InvalidPhoneNumberException(forms.ValidationError):
