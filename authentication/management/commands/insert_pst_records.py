@@ -31,10 +31,6 @@ class Command(BaseCommand):
         pst_time = utc_now.astimezone(pst)
         self.stdout.write(f"Converted PST Time (manual): {pst_time}")
 
-        # # 🔥 Django localtime (uses TIME_ZONE from settings)
-        # local_time = timezone.localtime(utc_now)
-        # self.stdout.write(f"Django Local Time (from settings): {local_time}")
-
         records = []
 
         for i in range(100):
