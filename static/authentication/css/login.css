@@ -21,7 +21,7 @@ body {
     overflow: hidden;
     z-index: -1;
 }
-
+/* wave added */
 .wave {
     position: absolute;
     width: 200%;
@@ -30,7 +30,6 @@ body {
     border-radius: 45%;
     animation: wave 10s infinite linear;
 }
-
 .wave-2 { animation-duration: 15s; }
 .wave-3 { animation-duration: 20s; }
 
@@ -48,18 +47,15 @@ body {
     max-width: 450px; /* slightly bigger than signup */
     box-shadow: 0 12px 30px rgba(0,0,0,0.2);
 }
-
 /* Login Header */
 .login-header {
     text-align: center;
     margin-bottom: 30px;
 }
-
 .login-header p {
     color: #555;
     font-size: 14px;
 }
-
 /* Form Groups */
 .form-group {
     position: relative;

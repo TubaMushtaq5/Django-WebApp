@@ -3,7 +3,7 @@
     box-sizing: border-box;
 }
 
-/* Body and waves */
+/* Body and waves for the back */
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -14,7 +14,6 @@ body {
     align-items: flex-start;
     padding: 20px;
 }
-
 /* Waves */
 .wave-container {
     position: fixed;
@@ -23,7 +22,6 @@ body {
     overflow: hidden;
     z-index: -1;
 }
-
 .wave {
     position: absolute;
     width: 200%;
@@ -40,7 +38,6 @@ body {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
-
 /* Home Container */
 .home-container {
     background: #fff;
