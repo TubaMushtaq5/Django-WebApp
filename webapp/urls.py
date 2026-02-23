@@ -19,12 +19,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import render
 from authentication import views
-from authentication.views import home_view
+from authentication.views import HomeView
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_view, name='home'),
+    path('', HomeView.as_view(), name='home'),
     path('auth/', include('authentication.urls')),
 ]
 

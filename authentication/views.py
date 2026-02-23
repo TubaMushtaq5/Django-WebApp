@@ -1,44 +1,64 @@
-from django.utils import timezone
 
+from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
 import pytz
 
 from authentication.models import CustomUser, PSTDateTimeRecord
 from .forms import CustomUserCreationForm, ProfileEditForm
 
+# ===========================
+# Signup View
+# ===========================
+class SignupView(View):
+    template_name = 'authentication/signup.html'
 
-def signup_view(request):
-    if request.method == 'POST':
-        # ModelForm as CustomUserCreationForm
+    def get(self, request):
+        form = CustomUserCreationForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('home')
-    else:
-        form = CustomUserCreationForm()
+        return render(request, self.template_name, {'form': form})
 
-    return render(request, 'authentication/signup.html', {'form': form})
+# ===========================
+# Profile Edit View
+# ===========================
+class ProfileEditView(LoginRequiredMixin, View):
+    template_name = 'authentication/profile_edit.html'
+    login_url = '/auth/login/'
 
-# @login_required
-def profile_edit_view(request):
-    if request.method == 'POST':
+    def get(self, request):
+        form = ProfileEditForm(instance=request.user)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
         form = ProfileEditForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             return redirect('home')
-    else:
-        form = ProfileEditForm(instance=request.user)
-    return render(request, 'authentication/profile_edit.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
 
-def login_view(request):
-    if request.user.is_authenticated:
-        return redirect('home')
 
-    if request.method == "POST":
+# ===========================
+# Login View
+# ===========================
+class LoginView(View):
+    template_name = 'authentication/login.html'
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('home')
+        return render(request, self.template_name)
+
+    def post(self, request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
@@ -54,39 +74,51 @@ def login_view(request):
             return redirect('home')
         else:
             messages.error(request, "Invalid email or password")
+            return render(request, self.template_name)
 
-    return render(request, 'authentication/login.html')
-# @login_required
-def logout_view(request):
-    logout(request)
-    return redirect('login')
+# ===========================
+# Logout View
+# ===========================
+class LogoutView(LoginRequiredMixin, View):
+    login_url = '/auth/login/'
 
-# @login_required(login_url='/auth/login/')
-def home_view(request):
-    records = PSTDateTimeRecord.objects.filter(user=request.user).order_by('-datetime_pst')
-    return render(request, "home.html", {"records": records})
+    def post(self, request):
+        logout(request)
+        return redirect('login')
 
-# @login_required(login_url='/auth/login/')
-def add_datetime(request):
-    print(f"Logged-in user: {request.user.username}")
-    if request.method == "POST":
+
+# ===========================
+# Home View
+# ===========================
+class HomeView(LoginRequiredMixin, View):
+    login_url = '/auth/login/'
+
+    def get(self, request):
+        records = PSTDateTimeRecord.objects.filter(user=request.user).order_by('-datetime_pst')
+        return render(request, "home.html", {"records": records})
+
+
+# ===========================
+# Add DateTime View
+# ===========================
+class AddDateTimeView(LoginRequiredMixin, View):
+
+    def post(self, request):
         title = request.POST.get("title")
         region = request.POST.get("region")
-        print(f"Received title: {title}, region: {region}")
+
         if title and region:
             now_utc = timezone.now()
             pst_tz = pytz.timezone("America/Los_Angeles")
-            print(f"Current UTC time: {now_utc}")
-            if region == "utc":
-                aware_dt = now_utc.astimezone(pst_tz)
-            else:
-                aware_dt = now_utc.astimezone(pst_tz)
+
+            # You can adjust here if you want UTC conversion
+            aware_dt = now_utc.astimezone(pst_tz)
+
             # Save record
-            
-            PSTDateTimeRecord.objects.create(title=title, datetime_pst=aware_dt,user=request.user)
-            print(f"Data to be added: {aware_dt}")
-            
-    return redirect("home")
-    # Fetch all records for display
-    # records = PSTDateTimeRecord.objects.filter(user=request.user)
-    # return render(request, "home.html", {"records": records})
+            PSTDateTimeRecord.objects.create(
+                title=title,
+                datetime_pst=aware_dt,
+                user=request.user
+            )
+
+        return redirect("home")
